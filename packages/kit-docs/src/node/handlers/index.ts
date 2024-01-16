@@ -325,13 +325,15 @@ function pushNestedLink(
     }
     // page is nested, but the parent dir doesn't have a page itself, so we need to make it
     else {
-      const newLink: SidebarLink = { title: dir!, key: dir, sublinks: [], match: match };
+      const newLink: SidebarLink = {
+        title: kebabToTitleCase(dir!),
+        key: dir,
+        sublinks: [],
+        match: match,
+      };
       links.push(newLink);
       pushNestedLink(newLink.sublinks!, title, slug, match, cleanDirs);
-      // console.log('problemo', title);
     }
-
-    // pushNestedLink(links[dir], link, cleanDirs);
   }
 }
 

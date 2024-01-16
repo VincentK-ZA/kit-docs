@@ -91,12 +91,47 @@ export function isActiveSidebarLink({ match, slug }: SidebarLink, currentPath: s
   return path === slug;
 }
 
-export function isSubLinkActive(link: SidebarLink, currentPath: string) {
-  const path = currentPath.replace(/\.html/, '');
+export function isSubLinkActive(link: SidebarLink, currentPath: string): boolean {
+  if (link.slug == currentPath) return true;
 
-  console.log('path', path, link.slug, path.startsWith(link.slug));
+  for (const sublink of link.sublinks ?? []) {
+    const sublinkActive = isSubLinkActive(sublink, currentPath);
+    if (sublinkActive) return true;
+  }
+  return false;
+}
 
-  return !link.slug || path.startsWith(link.slug);
+function flattenLinks(flattenedLinks: SidebarLink[], nestedLinks: SidebarLink[]) {
+  for (const link of nestedLinks) {
+    const clonedLink = { ...link };
+    delete clonedLink.sublinks;
+    if (clonedLink.slug) flattenedLinks.push(clonedLink);
+    if (link.sublinks && link.sublinks.length > 0) {
+      flattenLinks(flattenedLinks, link.sublinks);
+    }
+  }
+}
+
+function findParentLink(
+  activeLink: SidebarLink,
+  linksList: SidebarLink[],
+  parent: SidebarLink | null = null,
+): SidebarLink | null {
+  for (const link of linksList) {
+    // Check if the current link is the active link
+    if (link?.slug === activeLink?.slug) {
+      return parent; // Return the parent of the active link
+    }
+
+    // If the current link has sublinks, recursively search within them
+    if (link.sublinks && link.sublinks.length > 0) {
+      const foundParent = findParentLink(activeLink, link.sublinks, link);
+      if (foundParent) {
+        return foundParent; // Return the found parent if it exists
+      }
+    }
+  }
+  return null; // Return null if the active link is not found
 }
 
 export const SIDEBAR_CONTEXT_KEY = Symbol();
@@ -123,7 +158,13 @@ export function createSidebarContext(
 
   const normalizedConfig = derived(configStore, ($config) => normalizeSidebarConfig($config));
 
-  const allLinks = derived(normalizedConfig, ($config) => Object.values($config.links).flat());
+  const allLinks = derived(normalizedConfig, ($config) => {
+    const flattenedLinks: SidebarLink[] = [];
+
+    flattenLinks(flattenedLinks, $config.links);
+
+    return flattenedLinks;
+  });
 
   const activeLinkIndex = derived([allLinks, page], ([$allLinks, $page]) =>
     $allLinks.findIndex((link) => isActiveSidebarLink(link, $page.url.pathname)),
@@ -145,9 +186,9 @@ export function createSidebarContext(
   );
 
   const activeCategory = derived([normalizedConfig, activeLink], ([$config, $activeLink]) => {
-    const category = 'temp';
+    const parentLink = findParentLink($activeLink, $config.links);
 
-    return !category ? null : category;
+    return !parentLink ? null : parentLink.title;
   });
 
   const context: SidebarContext = {
