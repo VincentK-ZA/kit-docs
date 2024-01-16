@@ -79,34 +79,12 @@
     <slot name="top" />
 
     <ul class={clsx(!search && 'mt-8', 'pb-28 992:pb-0')}>
-      {#each Object.keys($config.links) as category (category)}
-        {@const links = $config.links[category]}
-        <SidebarCategory
-          name="Templates"
-          isActive={false}
-          subitems={[
-            {
-              name: 'Actions',
-              subitems: [
-                {
-                  name: 'Fields',
-                  subitems: [{ name: 'field 1' }, { name: 'field 2' }],
-                },
-                {
-                  name: 'Tasks',
-                  subitems: [{ name: 'task 1' }, { name: 'task 2', isActive: true }],
-                },
-              ],
-            },
-            {
-              name: 'States',
-            },
-          ]}
-        />
-        <li class="992:mt-10 mt-12 first:mt-0">
-          {#if category !== '.'}
+      {#each $config.links as category (category)}
+        <SidebarCategory sidebarLink={category} />
+        <!-- <li class="992:mt-10 mt-12 first:mt-0">
+          {#if category.title !== '.'}
             <h5 class="text-strong 992:mb-3 mb-8 text-lg font-semibold">
-              {category}
+              {category.title}
             </h5>
           {:else}
             <div class="mt-10" />
@@ -138,7 +116,7 @@
               </li>
             {/each}
           </ul>
-        </li>
+        </li> -->
       {/each}
     </ul>
 

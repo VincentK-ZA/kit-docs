@@ -58,59 +58,23 @@ export type SidebarLink = {
   slug: string;
   match?: 'deep' | RegExp;
   icon?: { before?: typeof SvelteComponent; after?: typeof SvelteComponent };
-};
-
-export type SidebarLinks = {
-  [category: string]: SidebarLink[];
-};
-
-export type SidebarSimpleLinks = {
-  [category: string]: string[];
+  sublinks?: SidebarLink[];
 };
 
 export type SidebarConfig = {
   baseUrl?: string;
-  links: SidebarLinks | SidebarSimpleLinks;
+  links: SidebarLink[];
 };
 
 export type ResolvedSidebarConfig = {
   baseUrl?: string;
-  links: SidebarLinks;
+  links: SidebarLink[];
 };
 
 export function normalizeSidebarConfig(config: SidebarConfig | null = null): ResolvedSidebarConfig {
-  if (!config) return { links: {} };
+  if (!config) return { links: [] };
 
-  const links: SidebarLinks = {};
-
-  const baseUrl = config.baseUrl?.replace(/\/$/, '') ?? '';
-
-  for (const category of Object.keys(config.links)) {
-    const categoryLinks = config.links[category];
-    const categorySlug = titleToKebabCase(category);
-
-    const categoryName = isString(config.links[category][0])
-      ? kebabToTitleCase(category)
-      : category;
-
-    for (const categoryLink of categoryLinks) {
-      const link: SidebarLink = isString(categoryLink)
-        ? {
-            title: kebabToTitleCase(categoryLink),
-            slug: `${baseUrl}/${categorySlug}/${categoryLink}`,
-          }
-        : categoryLink;
-
-      if (!links[categoryName]) links[categoryName] = [];
-
-      links[categoryName].push(link);
-    }
-  }
-
-  return {
-    ...config,
-    links,
-  };
+  return config;
 }
 
 export function isActiveSidebarLink({ match, slug }: SidebarLink, currentPath: string) {
@@ -125,6 +89,14 @@ export function isActiveSidebarLink({ match, slug }: SidebarLink, currentPath: s
   }
 
   return path === slug;
+}
+
+export function isSubLinkActive(link: SidebarLink, currentPath: string) {
+  const path = currentPath.replace(/\.html/, '');
+
+  console.log('path', path, link.slug, path.startsWith(link.slug));
+
+  return !link.slug || path.startsWith(link.slug);
 }
 
 export const SIDEBAR_CONTEXT_KEY = Symbol();
@@ -144,6 +116,10 @@ export function createSidebarContext(
 ): SidebarContext {
   const configStore =
     config && 'subscribe' in config ? config : readable(config as SidebarConfig | null);
+
+  // configStore.subscribe((config) => {
+  //   console.log('config', config);
+  // });
 
   const normalizedConfig = derived(configStore, ($config) => normalizeSidebarConfig($config));
 
@@ -169,13 +145,9 @@ export function createSidebarContext(
   );
 
   const activeCategory = derived([normalizedConfig, activeLink], ([$config, $activeLink]) => {
-    const category = Object.keys($config.links).find((category) =>
-      $config.links[category]?.some(
-        (link) => link.title === $activeLink?.title && link.slug === $activeLink?.slug,
-      ),
-    );
+    const category = 'temp';
 
-    return !category || category === '.' ? null : category;
+    return !category ? null : category;
   });
 
   const context: SidebarContext = {

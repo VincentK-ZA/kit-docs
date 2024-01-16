@@ -168,6 +168,14 @@ export type SidebarMetaResolver = (data: {
   slugify: typeof slugifyFilePath;
 }) => string | void | null | undefined | Promise<string | void | null | undefined>;
 
+export type SidebarLink = {
+  title: string;
+  slug?: string;
+  key?: string;
+  match?: 'deep' | RegExp;
+  sublinks?: SidebarLink[];
+};
+
 /**
  * Careful this function will throw if it can't match the `dir` param to a directory.
  */
@@ -175,6 +183,7 @@ export async function handleSidebarRequest(
   dirParam: string,
   options: HandleSidebarRequestOptions = {},
 ) {
+  //here
   const { extensions, filter, formatCategoryName, resolveTitle, resolveCategory, resolveSlug } =
     options;
 
@@ -186,11 +195,10 @@ export async function handleSidebarRequest(
   const dirPath = path.resolve(ROUTES_DIR, directory === 'index' ? '' : directory);
 
   const filePaths = sortOrderedFiles(readDirDeepSync(dirPath));
-
-  const links: Record<string, { title: string; slug: string; match?: 'deep' }[]> = {};
+  const links: SidebarLink[] = [];
 
   // Root at top.
-  links['.'] = [];
+  // links['.'] = [];
   let hasRoot = false;
 
   for (const filePath of filePaths) {
@@ -276,9 +284,11 @@ export async function handleSidebarRequest(
       (await resolveSlug?.({ ...resolverData, resolve: resolveDefaultSlug })) ??
       resolveDefaultSlug();
 
-    const match = isDeepMatch ? 'deep' : undefined;
+    // console.log(cleanPath, path.dirname(cleanPath).split('/').slice(1));
+    const myDirs = path.dirname(cleanPath).split('/').slice(1);
 
-    (links[category] ??= []).push({ title, slug, match });
+    const match = isDeepMatch ? 'deep' : undefined;
+    pushNestedLink(links, title, slug, match, myDirs);
     if (!hasRoot) hasRoot = category === '.';
   }
 
@@ -286,7 +296,43 @@ export async function handleSidebarRequest(
     delete links['.'];
   }
 
+  // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+  // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+  // console.log(JSON.stringify(links));
+
   return { links };
+}
+
+function pushNestedLink(
+  links: SidebarLink[],
+  title: string,
+  slug: string,
+  match: 'deep' | undefined,
+  cleanDirs: string[],
+) {
+  // console.log(link);
+  if (cleanDirs.length == 1) {
+    links.push({ title, slug, match, key: cleanDirs[0], sublinks: [] });
+    return;
+  } else {
+    // get and REMOVE first dir
+    const dir = cleanDirs.shift();
+
+    const existingLink = links.find((l) => l.key === dir);
+
+    if (existingLink) {
+      pushNestedLink(existingLink.sublinks!, title, slug, match, cleanDirs);
+    }
+    // page is nested, but the parent dir doesn't have a page itself, so we need to make it
+    else {
+      const newLink: SidebarLink = { title: dir!, key: dir, sublinks: [], match: match };
+      links.push(newLink);
+      pushNestedLink(newLink.sublinks!, title, slug, match, cleanDirs);
+      // console.log('problemo', title);
+    }
+
+    // pushNestedLink(links[dir], link, cleanDirs);
+  }
 }
 
 export type CreateSidebarRequestHandlerOptions = {
@@ -311,7 +357,7 @@ export function createSidebarRequestHandler(
         filter,
         ...handlerOptions,
       });
-
+      // console.log('links', links);
       return json({ links });
     } catch (e) {
       if (debug) {

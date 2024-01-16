@@ -1,28 +1,23 @@
 <script lang="ts">
-  import { getSidebarContext, isActiveSidebarLink } from './contexts';
+  import { getSidebarContext, isActiveSidebarLink, isSubLinkActive } from './contexts';
+  import type { SidebarLink } from './contexts';
+  import { page } from '$app/stores';
 
-  export let name: string;
-
-  interface SidebarCategoryProps {
-    name: string;
-    isActive?: boolean;
-    subitems?: SidebarCategoryProps[];
-  }
+  export let sidebarLink: SidebarLink;
 
   export let level = 0;
 
-  let isOpen = level == 0 ? true : false;
+  let isActive = isActiveSidebarLink(sidebarLink, $page.url.pathname);
 
-  export let subitems: SidebarCategoryProps[] = [];
-
-  export let isActive: boolean = false;
+  let isOpen = level == 0 ? true : isSubLinkActive(sidebarLink, $page.url.pathname) ? true : false;
 
   let paddingRem = level;
 </script>
 
 <div
-  class="{level == 0 ? 'text-lg font-semibold' : 'text-base font-normal'}
-         {level == 1 ? 'border-l border-border' : ''}"
+  class="{level == 0 ? 'text-lg font-semibold  pt-8' : 'text-base font-normal'}
+         {level == 1 ? 'border-l border-border' : ''}
+        "
 >
   <div
     class="flex justify-between items-center {isActive
@@ -43,8 +38,8 @@
     <!-- href={name} -->
     <!--  -->
     <!-- svelte-ignore a11y-missing-attribute -->
-    <a style="padding-left: {paddingRem}rem;">
-      {name}
+    <a style="padding-left: {paddingRem}rem;" href={sidebarLink.slug ?? ''}>
+      {sidebarLink.title}
       <!-- {#if link.icon?.before}
       <svelte:component this={link.icon.before} class="mr-1" width="24" height="24" />
     {/if}
@@ -81,13 +76,8 @@
     {/if}
   </div>
   {#if isOpen}
-    {#each subitems as subitem}
-      <svelte:self
-        name={subitem.name}
-        subitems={subitem.subitems}
-        level={level + 1}
-        isActive={subitem.isActive}
-      />
+    {#each sidebarLink.sublinks ?? [] as sublink}
+      <svelte:self sidebarLink={sublink} level={level + 1} />
     {/each}
   {/if}
 </div>
