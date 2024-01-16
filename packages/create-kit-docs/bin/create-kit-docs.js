@@ -106,7 +106,7 @@ async function main() {
     '@iconify-json/ri': '^1.0.0',
     '@sveltejs/adapter-auto': '^1.0.0',
     '@sveltejs/kit': '^1.0.0',
-    '@svelteness/kit-docs': `^${version}`,
+    'stubber-kit-docs': `^${version}`,
     clsx: '^1.0.0',
     'unplugin-icons': '^0.14.0',
     shiki: '^0.12.0',
@@ -149,7 +149,7 @@ async function main() {
     if (!/@svelteness\/kit-docs\/globals/.test(appDTSContent)) {
       fs.writeFileSync(
         appDTSPath,
-        '/// <reference types="@svelteness/kit-docs/globals" />\n\n' + appDTSContent,
+        '/// <reference types="stubber-kit-docs/globals" />\n\n' + appDTSContent,
       );
     }
   }

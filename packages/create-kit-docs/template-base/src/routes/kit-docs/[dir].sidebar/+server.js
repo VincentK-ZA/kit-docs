@@ -1,3 +1,3 @@
-import { createSidebarRequestHandler } from '@svelteness/kit-docs/node';
+import { createSidebarRequestHandler } from 'stubber-kit-docs/node';
 
 export const GET = createSidebarRequestHandler();

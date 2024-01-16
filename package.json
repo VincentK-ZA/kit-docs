@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm -F kit-docs build",
-    "clean": "pnpm -F kit-docs clean",
-    "dev": "pnpm -F kit-docs dev",
-    "lint": "pnpm -F kit-docs dev",
-    "preview": "pnpm -F kit-docs kit:preview",
+    "build": "pnpm -F stubber-kit-docs build",
+    "clean": "pnpm -F stubber-kit-docs clean",
+    "dev": "pnpm -F stubber-kit-docs dev",
+    "lint": "pnpm -F stubber-kit-docs dev",
+    "preview": "pnpm -F stubber-kit-docs kit:preview",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "docs:build": "pnpm -F kit-docs kit:build",
+    "docs:build": "pnpm -F stubber-kit-docs kit:build",
     "docs:preview": "pnpm preview",
     "demo:dev": "pnpm -F demo dev",
     "demo:build": "pnpm -F demo build",
@@ -57,6 +57,5 @@
   },
   "volta": {
     "node": "14.19.0"
-  },
-  "packageManager": "pnpm@6.32.3"
+  }
 }

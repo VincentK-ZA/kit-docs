@@ -45,7 +45,7 @@ export function parseMarkdownToSvelte(
   const fileName = getFileNameFromPath(filePath);
 
   hoistedTags.push(
-    ['<script>', `import { frontmatter } from "@svelteness/kit-docs";`, '</script>'].join('\n'),
+    ['<script>', `import { frontmatter } from "stubber-kit-docs";`, '</script>'].join('\n'),
   );
 
   hoistedTags.push(...(options.topLevelHtmlTags?.({ fileName, filePath, meta }) ?? []));

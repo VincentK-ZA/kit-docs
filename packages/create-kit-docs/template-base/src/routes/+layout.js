@@ -1,4 +1,4 @@
-import { createKitDocsLoader } from '@svelteness/kit-docs';
+import { createKitDocsLoader } from 'stubber-kit-docs';
 
 export const prerender = true;
 

@@ -1,5 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import kitDocs from '@svelteness/kit-docs/node';
+import kitDocs from 'stubber-kit-docs/node';
 import { resolve } from 'path';
 import icons from 'unplugin-icons/vite';
 

@@ -30,8 +30,8 @@ Documentation integration for [SvelteKit][sveltekit]. You can think of it as a
 
 You can find our documentation at [kitdocs.vercel.app](https://kitdocs.vercel.app/).
 
-[package]: https://www.npmjs.com/package/@svelteness/kit-docs
-[package-badge]: https://img.shields.io/npm/v/@svelteness/kit-docs/latest
+[package]: https://www.npmjs.com/package/stubber-kit-docs
+[package-badge]: https://img.shields.io/npm/v/stubber-kit-docs/latest
 [sveltekit]: https://kit.svelte.dev
 [vite]: https://vitejs.dev
 
