@@ -15,6 +15,9 @@ function renderDefault(parser: MarkdownParser, componentName: string) {
   return function (tokens: Token[], idx: number) {
     const token = tokens[idx];
 
+    console.log('tokens', tokens);
+    console.log('idx', idx);
+
     const props: string[] = [];
     const body: string[] = [];
 
