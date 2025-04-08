@@ -5,7 +5,6 @@
 <script lang="ts">
   import clsx from 'clsx';
   import { createEventDispatcher } from 'svelte';
-  import Transition from 'svelte-class-transition';
   import CloseIcon from '~icons/ri/close-fill';
 
   import { dialogManager, type CloseDialogCallback } from '$lib/actions/dialog-manager';
@@ -42,6 +41,10 @@
     closeDialog?.();
     hideDocumentScrollbar(false);
   }
+
+  $: classes = open
+    ? 'opacity-100 scale-100 pointer-events-auto'
+    : 'opacity-0 scale-95 pointer-events-none';
 </script>
 
 <div class="not-prose relative inline-block text-left">
@@ -71,45 +74,36 @@
     <Overlay {open} />
   {/if}
 
-  <Transition
-    toggle={open}
-    transitions="transition transform"
-    inTransition="ease-out duration-150"
-    inState="opacity-0 scale-95"
-    onState="opacity-100 scale-100"
-    outTransition="ease-out duration-100"
+  <div
+    id={popoverId}
+    class={clsx(
+      'absolute -top-4 -left-1/2 z-50 min-w-[340px] origin-top-right p-5 pt-4 duration-100 ease-in-out',
+      classes,
+    )}
+    tabindex="-1"
+    role="dialog"
   >
     <div
-      id={popoverId}
-      class={clsx(
-        'absolute -top-4 -right-0 z-50 min-w-[340px] origin-top-right p-5 pt-4',
-        !open && 'invisible',
-      )}
-      tabindex="-1"
-      role="dialog"
+      class="bg-elevate border-border flex min-h-[60px] flex-col overflow-hidden rounded-md border-[1.5px]"
     >
-      <div
-        class="bg-elevate border-border flex min-h-[60px] flex-col overflow-hidden rounded-md border-[1.5px]"
-      >
-        <div class="z-20 flex items-center">
-          <div class="flex-1" />
-          <button
-            class={clsx(
-              'text-soft hover:text-inverse mt-[0.125rem] mr-[0.125rem] p-4',
-              !open && 'pointer-events-none',
-            )}
-            on:pointerup={() => closeDialog()}
-            on:keydown={(e) => wasEnterKeyPressed(e) && closeDialog(true)}
-          >
-            <CloseIcon width="28" height="28" />
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
+      <div class="z-20 flex items-center">
+        <div class="flex-1" />
+        <button
+          class={clsx(
+            'text-soft hover:text-inverse mt-[0.125rem] mr-[0.125rem] p-4',
+            !open && 'pointer-events-none',
+          )}
+          on:pointerup={() => closeDialog()}
+          on:keydown={(e) => wasEnterKeyPressed(e) && closeDialog(true)}
+        >
+          <CloseIcon width="28" height="28" />
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
 
-        <div class="-mt-[2.5rem] px-4 pt-8 pb-6">
-          <slot />
-        </div>
+      <div class="-mt-[2.5rem] px-4 pt-8 pb-6">
+        <slot />
       </div>
     </div>
-  </Transition>
+  </div>
 </div>

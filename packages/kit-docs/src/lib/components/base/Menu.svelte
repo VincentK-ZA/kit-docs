@@ -4,7 +4,6 @@
 
 <script lang="ts">
   import clsx from 'clsx';
-  import Transition from 'svelte-class-transition';
 
   import { dialogManager } from '$lib/actions/dialog-manager';
   import { ariaBool } from '$lib/utils/aria';
@@ -21,6 +20,10 @@
   function onCloseMenu() {
     open = false;
   }
+
+  $: classes = open
+    ? 'opacity-100 scale-100 pointer-events-auto'
+    : 'opacity-0 scale-95 pointer-events-none';
 </script>
 
 <div class="not-prose relative inline-block text-left">
@@ -36,25 +39,21 @@
     use:dialogManager={{
       onOpen: onOpenMenu,
       onClose: onCloseMenu,
-      openOnPointerEnter: true,
-      closeOnPointerLeave: true,
+      openOnPointerEnter: false,
+      closeOnPointerLeave: false,
       focusSelectors: ['div > li[role="menuitem"]'],
     }}
   >
     <slot name="button" />
   </button>
 
-  <Transition
-    toggle={open}
-    transitions="transition transform"
-    inTransition="ease-out duration-100"
-    inState="opacity-0 scale-95"
-    onState="opacity-100 scale-100"
-    outTransition="ease-in duration-75"
+  <div
+    class="transition transform duration-100 ease-in-out origin-top-left
+         absolute left-0 {classes}"
   >
     <ul
       id={menuId}
-      class="bg-elevate border-border absolute right-0 z-50 mt-2 w-40 origin-top-right rounded-md border-[1.5px]"
+      class="bg-elevate border-border absolute left-0 z-50 mt-2 w-40 origin-top-right rounded-md border-[1.5px]"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby={menuButtonId}
@@ -64,5 +63,5 @@
         <slot />
       </div>
     </ul>
-  </Transition>
+  </div>
 </div>
