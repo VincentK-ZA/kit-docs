@@ -133,25 +133,6 @@ importers:
         specifier: ^4.4.9
         version: 4.5.12(@types/node@20.17.30)
 
-  packages/create-kit-docs:
-    dependencies:
-      enquirer:
-        specifier: ^2.4.1
-        version: 2.4.1
-      kleur:
-        specifier: ^4.1.5
-        version: 4.1.5
-      minimist:
-        specifier: ^1.2.8
-        version: 1.2.8
-      upath:
-        specifier: ^2.0.1
-        version: 2.0.1
-    devDependencies:
-      '@types/node':
-        specifier: ^20.6.0
-        version: 20.17.30
-
   packages/kit-docs:
     dependencies:
       '@types/markdown-it':
@@ -3713,10 +3694,6 @@ packages:
 
   unrs-resolver@1.4.1:
     resolution: {integrity: sha512-MhPB3wBI5BR8TGieTb08XuYlE8oFVEXdSAgat3psdlRyejl8ojQ8iqPcjh094qCZ1r+TnkxzP6BeCd/umfHckQ==}
-
-  upath@2.0.1:
-    resolution: {integrity: sha512-1uEe95xksV1O0CYKXo8vQvN1JEbtJp7lb7C5U9HMsIp6IVwntkH/oNUzyVNQSd4S1sYk2FpSSW44FqMc8qee5w==}
-    engines: {node: '>=4'}
 
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
@@ -7386,8 +7363,6 @@ snapshots:
       '@unrs/resolver-binding-win32-arm64-msvc': 1.4.1
       '@unrs/resolver-binding-win32-ia32-msvc': 1.4.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.4.1
-
-  upath@2.0.1: {}
 
   update-browserslist-db@1.1.3(browserslist@4.24.4):
     dependencies:
