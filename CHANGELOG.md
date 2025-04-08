@@ -1,3 +1,7 @@
+# [1.2.0](https://github.com/VincentK-ZA/kit-docs/compare/v1.1.5...v1.2.0) (2025-04-08)
+
+
+
 ## [1.1.5](https://github.com/svelteness/kit-docs/compare/v1.1.4...v1.1.5) (2023-09-16)
 
 
