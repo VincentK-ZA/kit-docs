@@ -1,3 +1,7 @@
+## [1.2.2](https://github.com/VincentK-ZA/kit-docs/compare/v1.1.5...v1.2.2) (2025-04-08)
+
+
+
 ## [1.2.1](https://github.com/VincentK-ZA/kit-docs/compare/v1.1.5...v1.2.1) (2025-04-08)
 
 
