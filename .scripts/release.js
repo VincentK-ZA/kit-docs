@@ -168,9 +168,16 @@ async function publishPackage(pkgName, version, runIfNotDry) {
 
   try {
     await runIfNotDry(
-      // use of yarn is intentional here as we rely on its publishing behavior.
-      'npx yarn',
-      ['publish', '--new-version', version, '--access', 'public'],
+      'pnpm',
+      ['version', version],
+      {
+        cwd: pkgRoot,
+        stdio: 'pipe',
+      },
+    );
+    await runIfNotDry(
+      'pnpm',
+      ['publish', '--access', 'public'],
       {
         cwd: pkgRoot,
         stdio: 'pipe',
