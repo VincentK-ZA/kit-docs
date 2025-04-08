@@ -169,14 +169,6 @@ async function publishPackage(pkgName, version, runIfNotDry) {
   try {
     await runIfNotDry(
       'pnpm',
-      ['version', version],
-      {
-        cwd: pkgRoot,
-        stdio: 'pipe',
-      },
-    );
-    await runIfNotDry(
-      'pnpm',
       ['publish', '--access', 'public'],
       {
         cwd: pkgRoot,
