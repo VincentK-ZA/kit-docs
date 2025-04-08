@@ -45,3 +45,9 @@ for hosting our docs site!
 ## 📝 License
 
 KitDocs is [MIT licensed](./LICENSE).
+
+# publishing a new version
+
+- `cd` into `packages/kit-docs`
+- `npm run build`
+- `npm publish`

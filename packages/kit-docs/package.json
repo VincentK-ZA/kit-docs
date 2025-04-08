@@ -1,6 +1,6 @@
 {
   "name": "stubber-kit-docs",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A fork of stubber-kit-docs | Documentation integration for SvelteKit.",
   "license": "MIT",
   "type": "module",
