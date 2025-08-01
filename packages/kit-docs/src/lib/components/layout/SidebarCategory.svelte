@@ -12,6 +12,14 @@
   let isOpen = level == 0 ? true : isSubLinkActive(sidebarLink, $page.url.pathname) ? true : false;
 
   let paddingRem = level;
+
+  const icon_size_class: { [key: number]: string } = {
+    0: 'w-6 h-6',
+    1: 'w-5 h-5',
+    2: 'w-4 h-4',
+  };
+
+  const icon_size = icon_size_class[level] || icon_size_class[2];
 </script>
 
 <div
@@ -48,7 +56,7 @@
       <svelte:component this={link.icon.after} class="ml-1" width="24" height="24" />
     {/if} -->
     </a>
-    {#if level == 0}
+    {#if sidebarLink.sublinks?.length}
       {#if !isOpen}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +64,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-6 h-6"
+          class={icon_size}
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
@@ -68,7 +76,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-6 h-6"
+          class={icon_size}
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
